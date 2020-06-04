@@ -4,6 +4,10 @@ import { Switch, Route } from "react-router-dom";
 // MUI
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
+// Redux
+import { Provider as ReduxProvider } from "react-redux";
+import store from "./redux/store";
+
 // Global styles
 import "./styles/App.scss";
 
@@ -35,16 +39,18 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Navbar />
-      <div className="container">
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
-        </Switch>
-      </div>
-    </ThemeProvider>
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <Navbar />
+        <div className="container">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+          </Switch>
+        </div>
+      </ThemeProvider>
+    </ReduxProvider>
   );
 }
 
