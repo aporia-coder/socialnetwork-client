@@ -43,14 +43,10 @@ const Login = () => {
   const [details, setDetails] = useState({});
   const loading = useSelector((state) => state.UI.loading);
   const errors = useSelector((state) => state.UI.errors);
-
   const history = useHistory();
   const dispatch = useDispatch();
 
-  let submitted = false;
-
   const handleSubmit = (e) => {
-    submitted = true;
     e.preventDefault();
     dispatch(loginUser(details, history));
   };

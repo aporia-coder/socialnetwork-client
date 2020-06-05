@@ -1,3 +1,5 @@
+@import "utilities";
+
 * {
   padding: 0;
   margin: 0;
@@ -10,6 +12,7 @@ body {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 li {

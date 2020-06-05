@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import axios from "axios";
 import AppIcon from "../assets/img/monkey.png";
 
 // MUI
@@ -10,6 +9,10 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { signUpUser } from "../redux/actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -38,9 +41,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = () => {
   const [details, setDetails] = useState({});
-  const [errors, setErrors] = useState("");
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const errors = useSelector((state) => state.UI.errors);
+  const loading = useSelector((state) => state.UI.loading);
 
   const handleChange = (e) => {
     setDetails({
@@ -51,58 +55,15 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+    const { userName, email, password, confirmPassword } = details;
     const userData = {
-      userName: details.userName,
-      email: details.email,
-      password: details.password,
-      confirmPassword: details.confirmPassword,
+      userName,
+      email,
+      password,
+      confirmPassword,
     };
-    const { password, confirmPassword } = userData;
-    if (password !== confirmPassword) {
-      setLoading(false);
-      return setErrors("Passwords must match");
-    }
-    axios
-      .post("/users/signup", userData)
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        setLoading(false);
-        history.push("/");
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        setErrors(err.response.data.error);
-        setLoading(false);
-      });
+    dispatch(signUpUser(userData, history));
   };
-
-  // const handleSubmit = (e) => {
-  //   const newUserData = {
-  //     userName: details.userName,
-  //     email: details.email,
-  //     password: details.password,
-  //     confirmPassword: details.password,
-  //   };
-  //   const { password, confirmPassword } = newUserData;
-  //   if (password === confirmPassword) {
-  //     e.preventDefault();
-  //     setLoading(true);
-  //     axios
-  //       .post("/users/signup", newUserData)
-  //       .then((res) => {
-  //         localStorage.setItem("token", res.data.token);
-  //         setLoading(false);
-  //         history.push("/");
-  //       })
-  //       .catch((err) => {
-  //         setErrors(err);
-  //         setLoading(false);
-  //       });
-  //   } else {
-  //     return setErrors("Passwords must match");
-  //   }
-  // };
 
   const classes = useStyles();
   return (
