@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 // Components
 import Scream from "../components/Scream";
 import Profile from "../components/Profile";
 import { ReactComponent as Spinner } from "../assets/img/spinner.svg";
-
-// Redux
-import { useSelector, useDispatch } from "react-redux";
 
 // MUI
 import Grid from "@material-ui/core/Grid";

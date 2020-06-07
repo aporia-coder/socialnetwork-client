@@ -1,12 +1,14 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 // MUI
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // Redux
-import { Provider as ReduxProvider } from "react-redux";
-import store from "./redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDetails, logoutUser } from "./redux/actions/userActions";
 
 // Global styles
 import "./styles/App.scss";
@@ -18,7 +20,7 @@ import Login from "./pages/Login";
 
 // Components
 import { Navbar } from "./components/Navbar";
-
+import { AuthRoute } from "./utilities/AuthRoute";
 // Theme
 const theme = createMuiTheme({
   palette: {
@@ -38,19 +40,35 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const dispatch = useDispatch();
+  const authenticated = useSelector((state) => state.user.authenticated);
+
+  // logging out users when token expires, redirect to login page if page refreshes
+
+  let token = localStorage.token;
+  if (token) {
+    let decodedToken = jwtDecode(token);
+    if (decodedToken.exp * 1000 < Date.now()) {
+      dispatch(logoutUser());
+      window.location.href = "/login";
+    } else {
+      dispatch({ type: "SET_AUTHENTICATED" });
+      axios.defaults.headers.common["x-auth-token"] = token;
+      dispatch(getUserDetails());
+    }
+  }
+
   return (
-    <ReduxProvider store={store}>
-      <ThemeProvider theme={theme}>
-        <Navbar />
-        <div className="container">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-          </Switch>
-        </div>
-      </ThemeProvider>
-    </ReduxProvider>
+    <ThemeProvider theme={theme}>
+      <Navbar />
+      <div className="container">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+        </Switch>
+      </div>
+    </ThemeProvider>
   );
 }
 
