@@ -20,20 +20,20 @@ export default function (state = initialState, action) {
         authenticated: true,
       };
     case SET_UNAUTHENTICATED:
-      return state;
-    case SET_USER: {
+      return initialState;
+    case SET_USER:
       return {
+        ...state,
         authenticated: true,
         loading: false,
         credentials: { ...action.payload },
       };
-    }
     case LOADING_USER:
       return {
         ...state,
         loading: true,
       };
     default:
-      return state;
+      return initialState;
   }
 }

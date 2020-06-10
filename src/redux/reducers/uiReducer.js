@@ -25,6 +25,6 @@ export default function (state = initialState, action) {
         loading: true,
       };
     default:
-      return state;
+      return initialState;
   }
 }

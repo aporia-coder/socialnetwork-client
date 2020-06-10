@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 
+// Components
+import DetailsDialog from "./DetailsDialog";
+
 // Redux
-import { uploadImage } from "../redux/actions/userActions";
+import { uploadImage, logoutUser } from "../redux/actions/userActions";
 
 // MUI
 import Paper from "@material-ui/core/Paper";
@@ -31,7 +34,9 @@ export const Profile = () => {
     profileImage,
   } = useSelector((state) => state.user.credentials);
 
+  const authenticated = useSelector((state) => state.user.authenticated);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     const image = e.target.files[0];
@@ -45,30 +50,29 @@ export const Profile = () => {
     imageFile.click();
   };
 
-  const authenticated = useSelector((state) => state.user.authenticated);
-
   const useStyles = makeStyles((theme) => ({
+    profileContainer: {
+      position: "relative",
+    },
     imageContainer: {
       display: "flex",
-      position: "relative",
       justifyContent: "center",
       textAlign: "center",
     },
     image: {
-      width: 200,
-      height: 200,
+      maxWidth: 250,
+      minHeight: 250,
       objectFit: "cover",
       borderRadius: "50%",
       padding: "1rem",
     },
     toolTip: {
       position: "absolute",
-      right: theme.spacing(1),
-      bottom: theme.spacing(2),
-      marginRight: "6rem",
+      right: "15%",
+      top: "10%",
     },
     icons: {
-      textAlign: "center",
+      verticalAlign: "center",
       paddingTop: "1rem",
     },
     buttonContainer: {
@@ -77,8 +81,11 @@ export const Profile = () => {
       textAlign: "center",
     },
     buttons: {
-      justifySelf: "center",
       margin: "2rem",
+    },
+    paper: {
+      textAlign: "center",
+      padding: "1rem",
     },
   }));
 
@@ -87,11 +94,11 @@ export const Profile = () => {
   return (
     <>
       {authenticated ? (
-        <Paper elevation={3}>
+        <Paper elevation={3} className={classes.profileContainer}>
           <div className={classes.imageContainer}>
             <img
               src={profileImage}
-              alt="profileImage"
+              alt="profileimage"
               className={classes.image}
             />
             <Tooltip title="Upload a Profile Image" className={classes.toolTip}>
@@ -107,34 +114,16 @@ export const Profile = () => {
             hidden="hidden"
             onChange={handleSubmit}
           />
-          <Typography
-            color="primary"
-            variant="h5"
-            align="center"
-            className="pb-1"
-          >
+          <Typography color="primary" variant="h5" align="center">
             @{userName}
           </Typography>
-          <Typography variant="body1" align="center" className="pb-1">
-            <CalendarTodayIcon
-              fontSize="large"
-              color="primary"
-              className={classes.icons}
-            />
-            {dayjs(createdAt).format("MMM YYYY")}
-          </Typography>
           {bio && (
-            <Typography variant="body1" align="center" className="pb-1">
-              <AccountCircleIcon
-                color="primary"
-                className={classes.icons}
-                fontSize="large"
-              />
+            <Typography variant="body2" align="center">
               {bio}
             </Typography>
           )}
           {location && (
-            <Typography variant="body1" align="center" className="pb-1">
+            <Typography variant="body1" align="center">
               <LocationOnIcon
                 color="primary"
                 fontSize="large"
@@ -144,17 +133,26 @@ export const Profile = () => {
             </Typography>
           )}
           {website && (
-            <Typography
-              color="primary"
-              variant="body1"
-              align="center"
-              className="pb-2"
-            >
+            <Typography color="primary" variant="body1" align="center">
               <a href={website} target="_blank" rel="noopener noreferrer">
                 {website}
               </a>
             </Typography>
           )}
+          <Typography variant="body1" align="center" className="pb-1">
+            <CalendarTodayIcon
+              fontSize="large"
+              color="primary"
+              className={classes.icons}
+            />
+            Joined: {dayjs(createdAt).format("MMM YYYY")}
+          </Typography>
+          <Tooltip title="Logout" className={classes.logout}>
+            <IconButton onClick={() => dispatch(logoutUser(history))}>
+              <KeyboardReturnIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+          <DetailsDialog />
         </Paper>
       ) : (
         <>

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
+// Action types
+import { CLEAR_ERRORS } from "../redux/types";
+
 // Components
 import Scream from "../components/Scream";
 import Profile from "../components/Profile";
@@ -14,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 const Home = () => {
   const [screams, setScreams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   // Load screams
   useEffect(() => {
@@ -22,6 +26,7 @@ const Home = () => {
       .then((res) => {
         setScreams(res.data.data);
         setLoading(false);
+        dispatch({ type: CLEAR_ERRORS });
       })
       .catch((err) => {
         console.log(err.message);

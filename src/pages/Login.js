@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import AppIcon from "../assets/img/monkey.png";
 
@@ -13,6 +13,9 @@ import { makeStyles } from "@material-ui/core/styles";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "../redux/actions/userActions";
+
+// Types
+import { CLEAR_ERRORS } from "../redux/types";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const [details, setDetails] = useState({});
-  const loading = useSelector((state) => state.UI.loading);
+  const loading = useSelector((state) => state.user.loading);
   const errors = useSelector((state) => state.UI.errors);
   const history = useHistory();
   const dispatch = useDispatch();
