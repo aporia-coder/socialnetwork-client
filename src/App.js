@@ -17,10 +17,12 @@ import "./styles/App.scss";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Error from "./pages/Error";
 
 // Components
 import { Navbar } from "./components/Navbar";
 import { AuthRoute } from "./utilities/AuthRoute";
+
 // Theme
 const theme = createMuiTheme({
   palette: {
@@ -42,6 +44,7 @@ const theme = createMuiTheme({
 function App() {
   const dispatch = useDispatch();
   const authenticated = useSelector((state) => state.user.authenticated);
+  const history = useHistory();
 
   // logging out users when token expires, redirect to login page if page refreshes
 
@@ -64,8 +67,9 @@ function App() {
       <div className="container">
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
+          <AuthRoute exact path="/login" authenticated component={Login} />
+          <AuthRoute exact path="/signup" authenticated component={Signup} />
+          <Route component={Error} />
         </Switch>
       </div>
     </ThemeProvider>

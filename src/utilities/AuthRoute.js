@@ -6,7 +6,7 @@ export const AuthRoute = ({ component: Component, authenticated, ...rest }) => (
     {...rest}
     render={(props) =>
       authenticated && localStorage.token ? (
-        <Redirect to="/login" />
+        <Redirect to="/" />
       ) : (
         <Component {...props} />
       )

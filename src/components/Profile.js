@@ -23,6 +23,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import CreateIcon from "@material-ui/icons/Create";
 import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 
 export const Profile = () => {
   const {
@@ -103,7 +104,7 @@ export const Profile = () => {
             />
             <Tooltip title="Upload a Profile Image" className={classes.toolTip}>
               <IconButton onClick={handleChange}>
-                <CreateIcon color="primary" />
+                <PhotoCameraIcon color="primary" />
               </IconButton>
             </Tooltip>
           </div>

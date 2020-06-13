@@ -13,3 +13,4 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 
 // Data reducer types
 export const GET_SCREAMS = "GET_SCREAMS";
+export const LOADING_DATA = "LOADING_DATA";

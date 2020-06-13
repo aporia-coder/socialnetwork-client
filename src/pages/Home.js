@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
-// Action types
-import { CLEAR_ERRORS } from "../redux/types";
+// Actions
+import { getScreams } from "../redux/actions/dataActions";
 
 // Components
 import Scream from "../components/Scream";
@@ -15,22 +15,12 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 const Home = () => {
-  const [screams, setScreams] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const loading = useSelector((state) => state.data.loading);
+  const screams = useSelector((state) => state.data.screams);
   const dispatch = useDispatch();
 
-  // Load screams
   useEffect(() => {
-    axios
-      .get("/screams")
-      .then((res) => {
-        setScreams(res.data.data);
-        setLoading(false);
-        dispatch({ type: CLEAR_ERRORS });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    dispatch(getScreams());
   }, []);
 
   return loading ? (
