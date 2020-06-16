@@ -9,6 +9,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, logoutUser } from "./redux/actions/userActions";
+import { getScreams } from "./redux/actions/dataActions";
 
 // Global styles
 import "./styles/App.scss";
@@ -44,11 +45,10 @@ const theme = createMuiTheme({
 function App() {
   const dispatch = useDispatch();
   const authenticated = useSelector((state) => state.user.authenticated);
-  const history = useHistory();
 
   // logging out users when token expires, redirect to login page if page refreshes
 
-  let token = localStorage.token;
+  const token = localStorage.token;
   if (token) {
     let decodedToken = jwtDecode(token);
     if (decodedToken.exp * 1000 < Date.now()) {

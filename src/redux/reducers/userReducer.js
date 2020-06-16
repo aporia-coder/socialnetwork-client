@@ -9,7 +9,6 @@ const initialState = {
   authenticated: false,
   loading: false,
   credentials: {},
-  likes: [],
 };
 
 export default function (state = initialState, action) {
@@ -23,10 +22,9 @@ export default function (state = initialState, action) {
       return initialState;
     case SET_USER:
       return {
-        ...state,
         authenticated: true,
         loading: false,
-        credentials: { ...action.payload },
+        ...action.payload,
       };
     case LOADING_USER:
       return {

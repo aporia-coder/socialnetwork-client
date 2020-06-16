@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
@@ -7,7 +7,11 @@ import dayjs from "dayjs";
 import DetailsDialog from "./DetailsDialog";
 
 // Redux
-import { uploadImage, logoutUser } from "../redux/actions/userActions";
+import {
+  uploadImage,
+  logoutUser,
+  getUserDetails,
+} from "../redux/actions/userActions";
 
 // MUI
 import Paper from "@material-ui/core/Paper";
@@ -33,7 +37,7 @@ export const Profile = () => {
     userName,
     createdAt,
     profileImage,
-  } = useSelector((state) => state.user.credentials);
+  } = useSelector((state) => state.user);
 
   const authenticated = useSelector((state) => state.user.authenticated);
   const dispatch = useDispatch();
@@ -62,7 +66,7 @@ export const Profile = () => {
     },
     image: {
       maxWidth: 250,
-      minHeight: 250,
+      maxHeight: 250,
       objectFit: "cover",
       borderRadius: "50%",
       padding: "1rem",

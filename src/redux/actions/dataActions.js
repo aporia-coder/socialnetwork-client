@@ -1,4 +1,4 @@
-import { GET_SCREAMS, LOADING_DATA } from "../types";
+import { GET_SCREAMS, LOADING_DATA, SET_SCREAMS } from "../types";
 import axios from "axios";
 
 export const getScreams = () => (dispatch) => {
@@ -9,6 +9,6 @@ export const getScreams = () => (dispatch) => {
       dispatch({ type: GET_SCREAMS, payload: res.data.data });
     })
     .catch((err) => {
-      console.log(err.message);
+      dispatch({ type: SET_SCREAMS, payload: [] });
     });
 };

@@ -3,10 +3,23 @@ import {
   SET_ERRORS,
   CLEAR_ERRORS,
   SET_UNAUTHENTICATED,
+  SET_AUTHENTICATED,
   LOADING_USER,
 } from "../types";
 import axios from "axios";
 import { addHeadersAndToken } from "../../utilities/addHeadersAndToken";
+
+export const getUserDetails = () => (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  axios
+    .get("/users/user")
+    .then((res) => {
+      dispatch({ type: SET_USER, payload: res.data.data });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 export const loginUser = (userData, history) => (dispatch) => {
   dispatch({ type: LOADING_USER });
@@ -14,9 +27,8 @@ export const loginUser = (userData, history) => (dispatch) => {
     .post("/users/login", userData)
     .then((res) => {
       addHeadersAndToken(res.data.token);
-      dispatch(getUserDetails());
       dispatch({ type: CLEAR_ERRORS });
-      history.push("/");
+      if (history) history.push("/");
     })
     .catch((err) => {
       dispatch({ type: SET_ERRORS, payload: err.response.data.error });
@@ -31,7 +43,6 @@ export const signUpUser = (userData, history) => (dispatch) => {
     .then((res) => {
       if (password === confirmPassword) {
         addHeadersAndToken(res.data.token);
-        dispatch(getUserDetails());
         dispatch({ type: CLEAR_ERRORS });
         history.push("/");
       } else {
@@ -52,12 +63,6 @@ export const logoutUser = (history) => (dispatch) => {
   localStorage.removeItem("token");
   dispatch({ type: SET_UNAUTHENTICATED });
   history.push("/login");
-};
-
-export const getUserDetails = () => (dispatch) => {
-  axios.get("/users/user").then((res) => {
-    dispatch({ type: SET_USER, payload: res.data.data });
-  });
 };
 
 export const uploadImage = (image) => (dispatch) => {

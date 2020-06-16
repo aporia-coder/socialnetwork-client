@@ -4,6 +4,7 @@ import axios from "axios";
 
 // Actions
 import { getScreams } from "../redux/actions/dataActions";
+import { getUserDetails } from "../redux/actions/userActions";
 
 // Components
 import Scream from "../components/Scream";
